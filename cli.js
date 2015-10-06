@@ -8,16 +8,6 @@ function list(val) {
   return val.split(',');
 }
 
-function toObject(val) {
-  keyvalues = val.split(',');
-  var message = {};
-  keyvalues.forEach(function(v) {
-    var values = v.split(':');
-    message[values[0]] = values[1];
-  });
-  return message;
-}
-
 program
   .version(version)
   .option('-m, --message <message>', 'message that you wish to send (string or key-value), eg: --message="message:this is test,path:landing"')
@@ -33,7 +23,7 @@ program.parse(process.argv);
 
 if (program.message && program.apiKey && program.registrationids) {
   if (program.json)
-    program.message = toObject(program.message);
+    program.message = JSON.parse(program.message);
   gcm(program.message, program.registrationids, program, function(err, response){
     console.log(err, response);
   });
